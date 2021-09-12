@@ -93,12 +93,14 @@ export interface PaginationProps {
    * The function executed on page change
    */
   onChange: (activePage: number) => void
+
+  annotation: boolean
 }
 
 type Ref = HTMLDivElement
 
 const Pagination = React.forwardRef<Ref, PaginationProps>(function Pagination(props, ref) {
-  const { totalResults, resultsPerPage = 10, label, onChange, ...other } = props
+  const { totalResults, resultsPerPage = 10, label, onChange, annotation = false, ...other } = props
   const [pages, setPages] = useState<(number | string)[]>([])
   const [activePage, setActivePage] = useState(1)
 
@@ -168,14 +170,16 @@ const Pagination = React.forwardRef<Ref, PaginationProps>(function Pagination(pr
       {/*
        * This (label) should probably be an option, and not the default
        */}
-      <span className="flex items-center font-semibold tracking-wide uppercase">
-        Showing {activePage * resultsPerPage - resultsPerPage + 1}-
-        {Math.min(activePage * resultsPerPage, totalResults)} of {totalResults}
-      </span>
+      {annotation && (
+        <span className="flex items-center font-semibold tracking-wide uppercase">
+          Showing {activePage * resultsPerPage - resultsPerPage + 1}-
+          {Math.min(activePage * resultsPerPage, totalResults)} of {totalResults}
+        </span>
+      )}
 
       <div className="flex mt-2 sm:mt-auto sm:justify-end">
         <nav aria-label={label}>
-          <ul className="inline-flex items-center">
+          <ul className="inline-flex items-center space-x-1">
             <li>
               <NavigationButton
                 directionIcon="prev"
